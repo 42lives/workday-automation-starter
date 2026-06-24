@@ -36,10 +36,13 @@ Output:
 - dry-run organization plan,
 - category counts,
 - possible private file warnings.
+- include and exclude based cleanup plan,
+- optional move manifest after explicit approval.
 
 Privacy rule:
 
 - do not move files automatically until the dry-run has been reviewed.
+- protect likely private files instead of moving them.
 
 ## Email to Notion
 

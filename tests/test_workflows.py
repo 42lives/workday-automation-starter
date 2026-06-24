@@ -5,6 +5,12 @@ from pathlib import Path
 from workday_automation_starter.doc_outline import build_doc_outline
 from workday_automation_starter.email_digest import build_email_digest, parse_email_items
 from workday_automation_starter.file_plan import build_file_plan, classify_file
+from workday_automation_starter.smart_clean import (
+    SmartCleanOptions,
+    apply_smart_clean_plan,
+    build_smart_clean_plan,
+    matches_rules,
+)
 
 
 class WorkdayAutomationTest(unittest.TestCase):
@@ -59,6 +65,47 @@ class WorkdayAutomationTest(unittest.TestCase):
         self.assertEqual(len(items), 1)
         self.assertIn("Review requested material", markdown)
         self.assertIn("sender,subject,summary,next_action", csv_output)
+
+    def test_smart_clean_respects_include_exclude_and_protects_private_files(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            (root / "report.pdf").write_text("placeholder\n", encoding="utf-8")
+            (root / "photo.png").write_text("placeholder\n", encoding="utf-8")
+            (root / "private").mkdir()
+            (root / "private" / "secret-note.txt").write_text("placeholder\n", encoding="utf-8")
+            (root / ".env").write_text("TOKEN=fake\n", encoding="utf-8")
+
+            plan = build_smart_clean_plan(
+                root,
+                SmartCleanOptions(include=["*.pdf", "*.png", "private/*", ".env"], exclude=["private/*"]),
+            )
+
+        planned = {action["relative_source"] for action in plan["actions"]}
+        protected = {item["path"] for item in plan["protected"]}
+        skipped = {item["path"] for item in plan["skipped"]}
+        self.assertEqual(planned, {"report.pdf", "photo.png"})
+        self.assertEqual(protected, {".env"})
+        self.assertEqual(skipped, {"private/secret-note.txt"})
+
+    def test_smart_clean_apply_moves_files_and_keeps_manifest_shape(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            source = root / "notes.md"
+            source.write_text("# Notes\n", encoding="utf-8")
+
+            plan = build_smart_clean_plan(root, SmartCleanOptions(include=["*.md"], exclude=[]))
+            applied = apply_smart_clean_plan(plan)
+
+            actions = applied["actions"]
+            self.assertTrue(applied["applied"])
+            self.assertFalse(source.exists())
+            self.assertEqual(len(actions), 1)
+            self.assertTrue(Path(actions[0]["target"]).exists())
+
+    def test_smart_clean_rule_matching_supports_only_and_excluded_patterns(self) -> None:
+        self.assertTrue(matches_rules("reports/june.pdf", ["reports/*"], []))
+        self.assertFalse(matches_rules("images/card.png", ["reports/*"], []))
+        self.assertFalse(matches_rules("reports/private.pdf", ["reports/*"], ["reports/private.*"]))
 
 
 if __name__ == "__main__":

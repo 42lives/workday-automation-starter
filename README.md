@@ -5,6 +5,7 @@ Local-first office automation examples for working professionals who want to use
 This project turns common daily tasks into small, reviewable command-line workflows:
 
 - Plan how to organize a messy downloads folder.
+- Clean a folder safely with include/exclude rules, dry-run review, protected files, and a move manifest.
 - Turn a long note into a presentation outline.
 - Summarize sample email text into a Notion-ready Markdown or CSV task list.
 
@@ -30,6 +31,18 @@ Create a file organization plan:
 
 ```bash
 python3 -m workday_automation_starter file-plan examples --format markdown
+```
+
+Plan a safer file cleanup:
+
+```bash
+python3 -m workday_automation_starter smart-clean ~/Downloads --include "*.pdf" --exclude "Private/*"
+```
+
+Apply the reviewed plan and write a manifest:
+
+```bash
+python3 -m workday_automation_starter smart-clean ~/Downloads --apply --manifest cleanup-manifest.json
 ```
 
 Create a presentation outline from a note:
@@ -61,6 +74,26 @@ The plan groups files into:
 - archives,
 - possible private files,
 - other files.
+
+### `smart-clean`
+
+Creates a reviewable cleanup plan and can optionally move files after explicit approval.
+
+Safety defaults:
+
+- dry-run by default,
+- `--apply` required before moving files,
+- `--include` and `--exclude` glob rules,
+- possible private files are protected instead of moved,
+- optional JSON manifest for review or undo planning.
+
+Examples:
+
+```bash
+python3 -m workday_automation_starter smart-clean ~/Downloads --exclude "*.key"
+python3 -m workday_automation_starter smart-clean ~/Downloads --include "*.pdf" --include "*.png"
+python3 -m workday_automation_starter smart-clean ~/Downloads --apply --manifest cleanup-manifest.json
+```
 
 ### `doc-outline`
 
@@ -96,6 +129,7 @@ Codex can help turn these starter workflows into safer real tools: tests, file h
 - Add PPTX generation after the outline workflow is stable.
 - Add a safe sample Notion import workflow.
 - Add a privacy preflight check before processing real folders.
+- Add undo command support from `smart-clean` manifests.
 - Add a guided automation checklist for new workflows.
 
 ## License
