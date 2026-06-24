@@ -7,6 +7,7 @@ from workday_automation_starter.doc_outline import build_doc_outline
 from workday_automation_starter.email_digest import build_email_digest, parse_email_items
 from workday_automation_starter.file_plan import build_file_plan, classify_file
 from workday_automation_starter.report_draft import build_report_draft, parse_calendar_events
+from workday_automation_starter.receipt_report import build_receipt_report, parse_receipt_filename, scan_receipts
 from workday_automation_starter.smart_clean import (
     SmartCleanOptions,
     apply_smart_clean_plan,
@@ -177,6 +178,31 @@ class WorkdayAutomationTest(unittest.TestCase):
 
     def test_campaign_kit_slugifies_korean_topics(self) -> None:
         self.assertEqual(slugify("2026년 친환경 트렌드 상품 기획"), "2026년-친환경-트렌드-상품-기획")
+
+    def test_receipt_report_parses_sample_receipt_filenames(self) -> None:
+        item = parse_receipt_filename("2026-06-12_meal_cafe_12800_lunch.jpg", "2026-06-12_meal_cafe_12800_lunch.jpg")
+
+        self.assertEqual(item.date, "2026-06-12")
+        self.assertEqual(item.month, "2026-06")
+        self.assertEqual(item.category, "meals")
+        self.assertEqual(item.vendor, "cafe")
+        self.assertEqual(item.amount, 12800)
+        self.assertEqual(item.target_folder, "2026-06_meals")
+
+    def test_receipt_report_generates_markdown_and_csv(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            (root / "2026-06-12_meal_cafe_12800_lunch.jpg").write_text("sample\n", encoding="utf-8")
+            (root / "2026-06-13_taxi_station_9500_meeting.png").write_text("sample\n", encoding="utf-8")
+
+            receipts = scan_receipts(root)
+            markdown = build_receipt_report(root, "markdown")
+            csv_output = build_receipt_report(root, "csv")
+
+        self.assertEqual(len(receipts), 2)
+        self.assertIn("# Expense Report Draft", markdown)
+        self.assertIn("Total amount: 22300", markdown)
+        self.assertIn("date,month,category,vendor,amount,purpose,path,target_folder", csv_output)
 
 
 if __name__ == "__main__":

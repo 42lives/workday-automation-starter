@@ -122,3 +122,24 @@ Privacy rule:
 - keep generated assets local first,
 - review claims and copyright risk before export,
 - make Word, PPT, image, and live-search connectors optional.
+
+## Receipt Report
+
+Input:
+
+- local receipt staging folder,
+- receipt-like file names,
+- optional future OCR connector.
+
+Output:
+
+- expense report draft,
+- category totals,
+- month/category organization plan,
+- CSV for accounting review.
+
+Privacy rule:
+
+- do not commit real receipts,
+- keep OCR optional,
+- review expense reports before submitting or exporting to Word.

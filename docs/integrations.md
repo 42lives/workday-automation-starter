@@ -57,6 +57,7 @@ python3 -m workday_automation_starter daily-report --source exports
 python3 -m workday_automation_starter daily-report --source gmail-calendar --preview
 python3 -m workday_automation_starter trend-digest --source web-search --topic AI --preview
 python3 -m workday_automation_starter campaign-kit --topic "Campaign idea" --export pptx --preview
+python3 -m workday_automation_starter receipt-report ~/Receipts --ocr optional --preview
 python3 -m workday_automation_starter publish-notion weekly-report.md --preview
 ```
 

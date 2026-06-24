@@ -8,6 +8,7 @@ from .doc_outline import build_doc_outline
 from .email_digest import build_email_digest
 from .file_plan import build_file_plan, render_file_plan
 from .report_draft import build_report_draft
+from .receipt_report import build_receipt_report
 from .smart_clean import (
     SmartCleanOptions,
     apply_smart_clean_plan,
@@ -63,6 +64,10 @@ def main(argv: list[str] | None = None) -> int:
     campaign_kit.add_argument("--output-dir", type=Path, required=True, help="Folder where package files will be written.")
     campaign_kit.add_argument("--cards", type=int, default=4, help="Number of card-news drafts to create.")
 
+    receipt_report = subparsers.add_parser("receipt-report", help="Create an expense report draft from receipt files.")
+    receipt_report.add_argument("path", type=Path, help="Receipt staging folder.")
+    receipt_report.add_argument("--format", choices=["markdown", "json", "csv"], default="markdown")
+
     args = parser.parse_args(argv)
 
     if args.command == "file-plan":
@@ -104,6 +109,10 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "campaign-kit":
         manifest = build_campaign_package(args.topic, args.output_dir, args.cards)
         print(render_package_summary(manifest), end="")
+        return 0
+
+    if args.command == "receipt-report":
+        print(build_receipt_report(args.path, args.format), end="")
         return 0
 
     parser.error(f"Unknown command: {args.command}")

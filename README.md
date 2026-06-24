@@ -11,6 +11,7 @@ This project turns common daily tasks into small, reviewable command-line workfl
 - Draft daily or weekly work reports from sanitized email and calendar samples.
 - Create trend digests and Notion-ready CSV from sanitized news items.
 - Generate a local campaign package with proposal, slide outline, and card-news prompts.
+- Draft receipt expense reports from local receipt staging folders.
 
 The tools are intentionally simple and dependency-free. They are safe starter workflows that can later be connected to Codex, ChatGPT, Notion, Gmail, or document tools after the privacy boundary is clear.
 
@@ -88,6 +89,12 @@ python3 -m workday_automation_starter campaign-kit \
   --topic "2026 eco trend product planning" \
   --output-dir outputs/eco-campaign \
   --cards 4
+```
+
+Create a receipt expense report:
+
+```bash
+python3 -m workday_automation_starter receipt-report examples/receipts
 ```
 
 ## Commands
@@ -189,6 +196,20 @@ The package includes:
 
 See [`docs/campaign-kit.md`](docs/campaign-kit.md).
 
+### `receipt-report`
+
+Creates an expense report draft from local receipt files.
+
+The output includes:
+
+- month/category organization plan,
+- category totals,
+- total amount,
+- expense item list,
+- Markdown, JSON, or CSV output.
+
+See [`docs/receipt-report.md`](docs/receipt-report.md).
+
 ## Privacy
 
 This project does not call Gmail, Notion, OpenAI, analytics, or any remote API. All examples run locally.
@@ -206,6 +227,7 @@ Codex can help turn these starter workflows into safer real tools: tests, file h
 - Add optional Gmail, Google Calendar, and Notion connector boundaries.
 - Add optional web search and Notion publishing connector boundaries for trend digests.
 - Add optional Word, PPT, and image export connector boundaries for campaign packages.
+- Add optional OCR and Word export connector boundaries for receipt reports.
 - Add Word export for daily and weekly report drafts.
 - Add a privacy preflight check before processing real folders.
 - Add undo command support from `smart-clean` manifests.
