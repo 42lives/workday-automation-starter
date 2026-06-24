@@ -79,3 +79,4 @@ Privacy rule:
 
 - use sample files in public,
 - review before exporting to Word, Notion, or Google Docs.
+- make Gmail, Calendar, and Notion integrations optional rather than required.

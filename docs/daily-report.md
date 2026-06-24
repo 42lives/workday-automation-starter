@@ -10,7 +10,7 @@ It is designed as a privacy-safe version of a common office automation workflow:
 4. list meetings and follow-ups,
 5. save a reviewable report draft.
 
-The public repository does not connect to real Gmail or Google Calendar. Use sample exports first, then add real integrations only after privacy boundaries are clear.
+The public repository does not connect to real Gmail or Google Calendar. Use sample exports first, then add real integrations only after privacy boundaries are clear. Optional connector expectations are documented in [`integrations.md`](integrations.md).
 
 ## Example
 
@@ -37,3 +37,4 @@ python3 -m workday_automation_starter daily-report \
 - Add filtering by sender or project.
 - Add a privacy preflight before processing real exports.
 - Add optional Notion or Google Docs export boundaries.
+- Add optional Gmail and Google Calendar connectors only after preview, token, and storage rules are clear.

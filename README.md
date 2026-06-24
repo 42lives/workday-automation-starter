@@ -12,6 +12,8 @@ This project turns common daily tasks into small, reviewable command-line workfl
 
 The tools are intentionally simple and dependency-free. They are safe starter workflows that can later be connected to Codex, ChatGPT, Notion, Gmail, or document tools after the privacy boundary is clear.
 
+By default, the project uses sample files and sanitized exports. Optional Gmail, Google Calendar, or Notion integrations should remain user-controlled and are documented as future connector boundaries in [`docs/integrations.md`](docs/integrations.md).
+
 ## Why This Exists
 
 Many people start using AI because they want to automate repeated office work: document drafting, presentation preparation, file organization, email follow-up, and knowledge capture. The hard part is not only generating text. The hard part is turning that intent into repeatable, inspectable workflows.
@@ -143,6 +145,7 @@ See [`docs/daily-report.md`](docs/daily-report.md).
 ## Privacy
 
 This project does not call Gmail, Notion, OpenAI, analytics, or any remote API. All examples run locally.
+See [`docs/integrations.md`](docs/integrations.md) for the optional connector model.
 
 ## OpenAI Codex Fit
 
@@ -153,6 +156,7 @@ Codex can help turn these starter workflows into safer real tools: tests, file h
 - Add Word/Markdown export templates.
 - Add PPTX generation after the outline workflow is stable.
 - Add a safe sample Notion import workflow.
+- Add optional Gmail, Google Calendar, and Notion connector boundaries.
 - Add Word export for daily and weekly report drafts.
 - Add a privacy preflight check before processing real folders.
 - Add undo command support from `smart-clean` manifests.

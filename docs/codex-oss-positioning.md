@@ -18,3 +18,5 @@ The project supports the same direction as `codex-maintainer-kit`, but from a mo
 Codex would help expand this into tested document exports, safer file operations, better privacy checks, and real integration boundaries.
 
 The `smart-clean` workflow is the most practical example: it supports include/exclude rules, dry-run review, protected files, explicit apply mode, and a manifest. That makes it closer to a real work automation tool than a simple extension-based file sorter.
+
+The integration approach is intentionally conservative: local sample files work first, while Gmail, Calendar, and Notion connections are documented as optional user-controlled connector boundaries. This keeps the project useful without requiring private account access.
