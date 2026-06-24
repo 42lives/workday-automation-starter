@@ -100,3 +100,25 @@ Privacy rule:
 - do not publish directly to Notion without preview,
 - make live web search optional,
 - keep sample trend data synthetic in public.
+
+## Campaign Package
+
+Input:
+
+- campaign topic,
+- card count,
+- output folder.
+
+Output:
+
+- proposal draft,
+- slide outline,
+- card-news copy,
+- image prompts,
+- package manifest.
+
+Privacy rule:
+
+- keep generated assets local first,
+- review claims and copyright risk before export,
+- make Word, PPT, image, and live-search connectors optional.

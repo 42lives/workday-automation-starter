@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
+from .campaign_kit import build_campaign_package, render_package_summary
 from .doc_outline import build_doc_outline
 from .email_digest import build_email_digest
 from .file_plan import build_file_plan, render_file_plan
@@ -57,6 +58,11 @@ def main(argv: list[str] | None = None) -> int:
     trend_digest.add_argument("--limit", type=int, default=10)
     trend_digest.add_argument("--format", choices=["markdown", "json", "csv"], default="markdown")
 
+    campaign_kit = subparsers.add_parser("campaign-kit", help="Create a local campaign package from one topic.")
+    campaign_kit.add_argument("--topic", required=True, help="Campaign topic or planning keyword.")
+    campaign_kit.add_argument("--output-dir", type=Path, required=True, help="Folder where package files will be written.")
+    campaign_kit.add_argument("--cards", type=int, default=4, help="Number of card-news drafts to create.")
+
     args = parser.parse_args(argv)
 
     if args.command == "file-plan":
@@ -93,6 +99,11 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.command == "trend-digest":
         print(build_trend_digest(args.items, args.topic, args.limit, args.format), end="")
+        return 0
+
+    if args.command == "campaign-kit":
+        manifest = build_campaign_package(args.topic, args.output_dir, args.cards)
+        print(render_package_summary(manifest), end="")
         return 0
 
     parser.error(f"Unknown command: {args.command}")

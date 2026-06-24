@@ -9,6 +9,7 @@ It is not a clone of a tutorial or video. It uses common automation themes:
 - email summary to Notion-ready notes,
 - daily and weekly report drafts from email and calendar samples,
 - trend digests and Notion-ready CSV from sanitized news items,
+- campaign packages with proposal, slide outline, and card-news prompts,
 - privacy-first sample data.
 
 The project supports the same direction as `codex-maintainer-kit`, but from a more practical office workflow angle:

@@ -10,6 +10,7 @@ This project turns common daily tasks into small, reviewable command-line workfl
 - Summarize sample email text into a Notion-ready Markdown or CSV task list.
 - Draft daily or weekly work reports from sanitized email and calendar samples.
 - Create trend digests and Notion-ready CSV from sanitized news items.
+- Generate a local campaign package with proposal, slide outline, and card-news prompts.
 
 The tools are intentionally simple and dependency-free. They are safe starter workflows that can later be connected to Codex, ChatGPT, Notion, Gmail, or document tools after the privacy boundary is clear.
 
@@ -78,6 +79,15 @@ python3 -m workday_automation_starter trend-digest \
   --items examples/trends/sample-news.csv \
   --topic AI \
   --format markdown
+```
+
+Create a campaign package:
+
+```bash
+python3 -m workday_automation_starter campaign-kit \
+  --topic "2026 eco trend product planning" \
+  --output-dir outputs/eco-campaign \
+  --cards 4
 ```
 
 ## Commands
@@ -165,6 +175,20 @@ The output includes:
 
 See [`docs/trend-digest.md`](docs/trend-digest.md).
 
+### `campaign-kit`
+
+Creates a local campaign package from one topic.
+
+The package includes:
+
+- proposal draft,
+- presentation outline,
+- card-news copy,
+- image prompts,
+- package manifest.
+
+See [`docs/campaign-kit.md`](docs/campaign-kit.md).
+
 ## Privacy
 
 This project does not call Gmail, Notion, OpenAI, analytics, or any remote API. All examples run locally.
@@ -181,6 +205,7 @@ Codex can help turn these starter workflows into safer real tools: tests, file h
 - Add a safe sample Notion import workflow.
 - Add optional Gmail, Google Calendar, and Notion connector boundaries.
 - Add optional web search and Notion publishing connector boundaries for trend digests.
+- Add optional Word, PPT, and image export connector boundaries for campaign packages.
 - Add Word export for daily and weekly report drafts.
 - Add a privacy preflight check before processing real folders.
 - Add undo command support from `smart-clean` manifests.

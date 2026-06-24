@@ -2,6 +2,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from workday_automation_starter.campaign_kit import build_campaign_package, render_package_summary, slugify
 from workday_automation_starter.doc_outline import build_doc_outline
 from workday_automation_starter.email_digest import build_email_digest, parse_email_items
 from workday_automation_starter.file_plan import build_file_plan, classify_file
@@ -159,6 +160,23 @@ class WorkdayAutomationTest(unittest.TestCase):
         self.assertIn("OpenAI automation workflow", markdown)
         self.assertNotIn("Market update", markdown)
         self.assertIn("summary_1,summary_2,summary_3", csv_output)
+
+    def test_campaign_kit_writes_reviewable_package_files(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            output_dir = Path(tmpdir) / "campaign"
+            manifest = build_campaign_package("2026 eco trend product planning", output_dir, cards=4)
+            summary = render_package_summary(manifest)
+
+            self.assertTrue((output_dir / "proposal.md").exists())
+            self.assertTrue((output_dir / "slides-outline.md").exists())
+            self.assertTrue((output_dir / "card-news.md").exists())
+            self.assertTrue((output_dir / "campaign-manifest.json").exists())
+            self.assertIn("Campaign Package", summary)
+            self.assertIn("proposal.md", summary)
+            self.assertEqual(manifest["slug"], "2026-eco-trend-product-planning")
+
+    def test_campaign_kit_slugifies_korean_topics(self) -> None:
+        self.assertEqual(slugify("2026년 친환경 트렌드 상품 기획"), "2026년-친환경-트렌드-상품-기획")
 
 
 if __name__ == "__main__":
