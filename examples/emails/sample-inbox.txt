@@ -1,0 +1,11 @@
+From: teammate@example.test
+Subject: Draft review
+Body: Please review the proposal draft before Friday and send comments.
+---
+From: operations@example.test
+Subject: Weekly schedule
+Body: The team schedule changed. Please check the new meeting time.
+---
+From: notes@example.test
+Subject: Knowledge capture
+Body: Save the automation checklist so it can be reused next week.

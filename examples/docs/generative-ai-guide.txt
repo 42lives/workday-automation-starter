@@ -1,0 +1,7 @@
+Generative AI Workday Guide.
+
+Start with a repeated task that happens every week. Define the input, expected output, privacy risk, and review step. Create a small automation before connecting any real account.
+
+For document work, ask for an outline before asking for a final report. For presentations, convert the outline into slide titles and short bullets. For file management, create a dry-run plan before moving anything.
+
+When email or Notion data is involved, use sample data first. Keep private content out of public repositories. Review every generated output before sharing it.

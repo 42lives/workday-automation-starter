@@ -1,0 +1,17 @@
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.venv/
+dist/
+build/
+*.egg-info/
+outputs/
+Downloads/
+*.docx
+*.pptx
+*.xlsx
+*.pdf
+*.key
+*.pem
+.env
+.env.*

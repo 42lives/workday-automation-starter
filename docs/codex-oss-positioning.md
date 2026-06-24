@@ -1,0 +1,17 @@
+# Codex OSS Positioning
+
+Workday Automation Starter is a supporting public repository for a working professional learning to turn repeated office work into safe automation.
+
+It is not a clone of a tutorial or video. It uses common automation themes:
+
+- document to presentation outline,
+- downloads folder organization,
+- email summary to Notion-ready notes,
+- privacy-first sample data.
+
+The project supports the same direction as `codex-maintainer-kit`, but from a more practical office workflow angle:
+
+- `codex-maintainer-kit`: public repository maintenance automation,
+- `workday-automation-starter`: daily work automation examples.
+
+Codex would help expand this into tested document exports, safer file operations, better privacy checks, and real integration boundaries.
