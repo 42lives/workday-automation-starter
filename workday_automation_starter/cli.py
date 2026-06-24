@@ -6,6 +6,7 @@ from pathlib import Path
 from .doc_outline import build_doc_outline
 from .email_digest import build_email_digest
 from .file_plan import build_file_plan, render_file_plan
+from .report_draft import build_report_draft
 from .smart_clean import (
     SmartCleanOptions,
     apply_smart_clean_plan,
@@ -43,6 +44,12 @@ def main(argv: list[str] | None = None) -> int:
     email_digest.add_argument("path", type=Path)
     email_digest.add_argument("--format", choices=["markdown", "csv"], default="markdown")
 
+    daily_report = subparsers.add_parser("daily-report", help="Create a daily or weekly report draft from sample inputs.")
+    daily_report.add_argument("--emails", type=Path, required=True, help="Sample Gmail-like text export.")
+    daily_report.add_argument("--calendar", type=Path, required=True, help="Sample calendar CSV export.")
+    daily_report.add_argument("--period", choices=["daily", "weekly"], default="weekly")
+    daily_report.add_argument("--format", choices=["markdown", "json"], default="markdown")
+
     args = parser.parse_args(argv)
 
     if args.command == "file-plan":
@@ -71,6 +78,10 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.command == "email-digest":
         print(build_email_digest(args.path, args.format), end="")
+        return 0
+
+    if args.command == "daily-report":
+        print(build_report_draft(args.emails, args.calendar, args.period, args.format), end="")
         return 0
 
     parser.error(f"Unknown command: {args.command}")

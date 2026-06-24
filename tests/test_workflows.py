@@ -5,6 +5,7 @@ from pathlib import Path
 from workday_automation_starter.doc_outline import build_doc_outline
 from workday_automation_starter.email_digest import build_email_digest, parse_email_items
 from workday_automation_starter.file_plan import build_file_plan, classify_file
+from workday_automation_starter.report_draft import build_report_draft, parse_calendar_events
 from workday_automation_starter.smart_clean import (
     SmartCleanOptions,
     apply_smart_clean_plan,
@@ -106,6 +107,34 @@ class WorkdayAutomationTest(unittest.TestCase):
         self.assertTrue(matches_rules("reports/june.pdf", ["reports/*"], []))
         self.assertFalse(matches_rules("images/card.png", ["reports/*"], []))
         self.assertFalse(matches_rules("reports/private.pdf", ["reports/*"], ["reports/private.*"]))
+
+    def test_daily_report_combines_sample_email_and_calendar_inputs(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            emails = root / "emails.txt"
+            calendar = root / "calendar.csv"
+            emails.write_text(
+                "From: partner@example.test\n"
+                "Subject: Proposal review\n"
+                "Body: Please review the proposal and send comments.\n",
+                encoding="utf-8",
+            )
+            calendar.write_text(
+                "date,time,title,status,notes\n"
+                "2026-06-24,09:30,Partner sync,completed,Reviewed project status\n"
+                "2026-06-25,14:00,Planning meeting,scheduled,Prepare agenda\n",
+                encoding="utf-8",
+            )
+
+            events = parse_calendar_events(calendar)
+            markdown = build_report_draft(emails, calendar, "weekly", "markdown")
+            json_output = build_report_draft(emails, calendar, "weekly", "json")
+
+        self.assertEqual(len(events), 2)
+        self.assertIn("# Weekly Work Report Draft", markdown)
+        self.assertIn("Proposal review", markdown)
+        self.assertIn("Planning meeting", markdown)
+        self.assertIn('"follow_ups": 1', json_output)
 
 
 if __name__ == "__main__":

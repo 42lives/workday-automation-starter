@@ -8,6 +8,7 @@ This project turns common daily tasks into small, reviewable command-line workfl
 - Clean a folder safely with include/exclude rules, dry-run review, protected files, and a move manifest.
 - Turn a long note into a presentation outline.
 - Summarize sample email text into a Notion-ready Markdown or CSV task list.
+- Draft daily or weekly work reports from sanitized email and calendar samples.
 
 The tools are intentionally simple and dependency-free. They are safe starter workflows that can later be connected to Codex, ChatGPT, Notion, Gmail, or document tools after the privacy boundary is clear.
 
@@ -56,6 +57,15 @@ Create a Notion-ready summary from sample email text:
 ```bash
 python3 -m workday_automation_starter email-digest examples/emails/sample-inbox.txt --format markdown
 python3 -m workday_automation_starter email-digest examples/emails/sample-inbox.txt --format csv
+```
+
+Create a weekly work report draft:
+
+```bash
+python3 -m workday_automation_starter daily-report \
+  --emails examples/emails/sample-inbox.txt \
+  --calendar examples/calendar/sample-week.csv \
+  --period weekly
 ```
 
 ## Commands
@@ -115,6 +125,21 @@ Body: Please review the draft by Friday.
 
 Use sample data only. Do not commit real email content.
 
+### `daily-report`
+
+Creates a daily or weekly report draft from sanitized email and calendar sample files.
+
+The report includes:
+
+- email count and calendar event count,
+- completed meetings,
+- detected follow-ups,
+- key issues,
+- meeting summary,
+- next actions.
+
+See [`docs/daily-report.md`](docs/daily-report.md).
+
 ## Privacy
 
 This project does not call Gmail, Notion, OpenAI, analytics, or any remote API. All examples run locally.
@@ -128,6 +153,7 @@ Codex can help turn these starter workflows into safer real tools: tests, file h
 - Add Word/Markdown export templates.
 - Add PPTX generation after the outline workflow is stable.
 - Add a safe sample Notion import workflow.
+- Add Word export for daily and weekly report drafts.
 - Add a privacy preflight check before processing real folders.
 - Add undo command support from `smart-clean` manifests.
 - Add a guided automation checklist for new workflows.

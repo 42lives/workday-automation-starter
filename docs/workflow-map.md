@@ -60,3 +60,22 @@ Privacy rule:
 
 - do not commit real Gmail exports,
 - connect real services only after the local workflow is stable.
+
+## Daily and Weekly Reports
+
+Input:
+
+- sanitized email export,
+- sanitized calendar CSV,
+- selected report period.
+
+Output:
+
+- Markdown report draft,
+- JSON report data,
+- key issues and next actions.
+
+Privacy rule:
+
+- use sample files in public,
+- review before exporting to Word, Notion, or Google Docs.

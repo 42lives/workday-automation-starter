@@ -7,6 +7,7 @@ It is not a clone of a tutorial or video. It uses common automation themes:
 - document to presentation outline,
 - downloads folder organization and safe cleanup,
 - email summary to Notion-ready notes,
+- daily and weekly report drafts from email and calendar samples,
 - privacy-first sample data.
 
 The project supports the same direction as `codex-maintainer-kit`, but from a more practical office workflow angle:
