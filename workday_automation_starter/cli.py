@@ -14,6 +14,7 @@ from .smart_clean import (
     render_smart_clean_plan,
     write_manifest,
 )
+from .trend_digest import build_trend_digest
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -50,6 +51,12 @@ def main(argv: list[str] | None = None) -> int:
     daily_report.add_argument("--period", choices=["daily", "weekly"], default="weekly")
     daily_report.add_argument("--format", choices=["markdown", "json"], default="markdown")
 
+    trend_digest = subparsers.add_parser("trend-digest", help="Create a trend digest from sanitized news items.")
+    trend_digest.add_argument("--items", type=Path, required=True, help="CSV file with sanitized trend/news items.")
+    trend_digest.add_argument("--topic", help="Optional topic filter such as AI, IT, or finance.")
+    trend_digest.add_argument("--limit", type=int, default=10)
+    trend_digest.add_argument("--format", choices=["markdown", "json", "csv"], default="markdown")
+
     args = parser.parse_args(argv)
 
     if args.command == "file-plan":
@@ -82,6 +89,10 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.command == "daily-report":
         print(build_report_draft(args.emails, args.calendar, args.period, args.format), end="")
+        return 0
+
+    if args.command == "trend-digest":
+        print(build_trend_digest(args.items, args.topic, args.limit, args.format), end="")
         return 0
 
     parser.error(f"Unknown command: {args.command}")

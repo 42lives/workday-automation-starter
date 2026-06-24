@@ -80,3 +80,23 @@ Privacy rule:
 - use sample files in public,
 - review before exporting to Word, Notion, or Google Docs.
 - make Gmail, Calendar, and Notion integrations optional rather than required.
+
+## Trend Digest
+
+Input:
+
+- sanitized news or newsletter CSV,
+- topic filter,
+- item limit.
+
+Output:
+
+- Markdown digest,
+- JSON digest data,
+- Notion-ready CSV.
+
+Privacy rule:
+
+- do not publish directly to Notion without preview,
+- make live web search optional,
+- keep sample trend data synthetic in public.

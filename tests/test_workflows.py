@@ -12,6 +12,7 @@ from workday_automation_starter.smart_clean import (
     build_smart_clean_plan,
     matches_rules,
 )
+from workday_automation_starter.trend_digest import build_trend_digest, parse_trend_items, score_importance
 
 
 class WorkdayAutomationTest(unittest.TestCase):
@@ -135,6 +136,29 @@ class WorkdayAutomationTest(unittest.TestCase):
         self.assertIn("Proposal review", markdown)
         self.assertIn("Planning meeting", markdown)
         self.assertIn('"follow_ups": 1', json_output)
+
+    def test_trend_digest_filters_scores_and_exports_notion_ready_csv(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            trends = Path(tmpdir) / "trends.csv"
+            trends.write_text(
+                "date,topic,source,title,url,summary\n"
+                "2026-06-24,AI,Example News,OpenAI automation workflow,https://example.test/a,"
+                "OpenAI released an automation workflow. It helps teams review documents. It may affect office work.\n"
+                "2026-06-24,Finance,Example News,Market update,https://example.test/b,"
+                "Markets moved today. Analysts are watching rates. No automation impact noted.\n",
+                encoding="utf-8",
+            )
+
+            items = parse_trend_items(trends)
+            markdown = build_trend_digest(trends, "AI", 10, "markdown")
+            csv_output = build_trend_digest(trends, "AI", 10, "csv")
+
+        self.assertEqual(len(items), 2)
+        self.assertGreater(score_importance(items[0]), score_importance(items[1]))
+        self.assertIn("# Trend Digest: AI", markdown)
+        self.assertIn("OpenAI automation workflow", markdown)
+        self.assertNotIn("Market update", markdown)
+        self.assertIn("summary_1,summary_2,summary_3", csv_output)
 
 
 if __name__ == "__main__":

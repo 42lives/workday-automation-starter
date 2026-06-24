@@ -9,6 +9,7 @@ This project turns common daily tasks into small, reviewable command-line workfl
 - Turn a long note into a presentation outline.
 - Summarize sample email text into a Notion-ready Markdown or CSV task list.
 - Draft daily or weekly work reports from sanitized email and calendar samples.
+- Create trend digests and Notion-ready CSV from sanitized news items.
 
 The tools are intentionally simple and dependency-free. They are safe starter workflows that can later be connected to Codex, ChatGPT, Notion, Gmail, or document tools after the privacy boundary is clear.
 
@@ -68,6 +69,15 @@ python3 -m workday_automation_starter daily-report \
   --emails examples/emails/sample-inbox.txt \
   --calendar examples/calendar/sample-week.csv \
   --period weekly
+```
+
+Create a trend digest:
+
+```bash
+python3 -m workday_automation_starter trend-digest \
+  --items examples/trends/sample-news.csv \
+  --topic AI \
+  --format markdown
 ```
 
 ## Commands
@@ -142,6 +152,19 @@ The report includes:
 
 See [`docs/daily-report.md`](docs/daily-report.md).
 
+### `trend-digest`
+
+Creates a trend digest from sanitized news or newsletter items.
+
+The output includes:
+
+- topic filtering,
+- 3-line summaries,
+- simple importance scores,
+- Markdown, JSON, or Notion-ready CSV.
+
+See [`docs/trend-digest.md`](docs/trend-digest.md).
+
 ## Privacy
 
 This project does not call Gmail, Notion, OpenAI, analytics, or any remote API. All examples run locally.
@@ -157,6 +180,7 @@ Codex can help turn these starter workflows into safer real tools: tests, file h
 - Add PPTX generation after the outline workflow is stable.
 - Add a safe sample Notion import workflow.
 - Add optional Gmail, Google Calendar, and Notion connector boundaries.
+- Add optional web search and Notion publishing connector boundaries for trend digests.
 - Add Word export for daily and weekly report drafts.
 - Add a privacy preflight check before processing real folders.
 - Add undo command support from `smart-clean` manifests.
