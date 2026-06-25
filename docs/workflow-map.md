@@ -143,3 +143,25 @@ Privacy rule:
 - do not commit real receipts,
 - keep OCR optional,
 - review expense reports before submitting or exporting to Word.
+
+## Research Pack
+
+Input:
+
+- source notes,
+- PDF placeholders,
+- research topic,
+- desired image prompt count.
+
+Output:
+
+- literature summary,
+- presentation guide,
+- image prompts,
+- package manifest.
+
+Privacy rule:
+
+- do not commit copyrighted PDFs or paper text without permission,
+- keep PDF extraction optional,
+- review citations and claims before sharing.

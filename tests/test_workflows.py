@@ -8,6 +8,7 @@ from workday_automation_starter.email_digest import build_email_digest, parse_em
 from workday_automation_starter.file_plan import build_file_plan, classify_file
 from workday_automation_starter.report_draft import build_report_draft, parse_calendar_events
 from workday_automation_starter.receipt_report import build_receipt_report, parse_receipt_filename, scan_receipts
+from workday_automation_starter.research_pack import build_research_package, scan_research_sources
 from workday_automation_starter.smart_clean import (
     SmartCleanOptions,
     apply_smart_clean_plan,
@@ -203,6 +204,35 @@ class WorkdayAutomationTest(unittest.TestCase):
         self.assertIn("# Expense Report Draft", markdown)
         self.assertIn("Total amount: 22300", markdown)
         self.assertIn("date,month,category,vendor,amount,purpose,path,target_folder", csv_output)
+
+    def test_research_pack_builds_summary_presentation_and_prompt_files(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            sources = root / "sources"
+            output = root / "package"
+            sources.mkdir()
+            (sources / "paper-notes.md").write_text(
+                "# Agent Workflow Study\n"
+                "- Agents can help summarize repeated knowledge work.\n"
+                "- Review checkpoints reduce automation mistakes.\n"
+                "- Local-first workflows protect private source material.\n",
+                encoding="utf-8",
+            )
+            (sources / "reference-paper.pdf").write_text("placeholder\n", encoding="utf-8")
+
+            parsed_sources = scan_research_sources(sources)
+            manifest = build_research_package("AI workflow research", sources, output, images=2)
+            package_dir = Path(manifest["package_dir"])
+            expected_files_exist = [
+                (package_dir / "literature-summary.md").exists(),
+                (package_dir / "presentation-guide.md").exists(),
+                (package_dir / "image-prompts.md").exists(),
+                (package_dir / "research-manifest.json").exists(),
+            ]
+
+        self.assertEqual(len(parsed_sources), 2)
+        self.assertEqual(manifest["source_count"], 2)
+        self.assertEqual(expected_files_exist, [True, True, True, True])
 
 
 if __name__ == "__main__":

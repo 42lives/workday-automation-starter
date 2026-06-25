@@ -12,6 +12,7 @@ This project turns common daily tasks into small, reviewable command-line workfl
 - Create trend digests and Notion-ready CSV from sanitized news items.
 - Generate a local campaign package with proposal, slide outline, and card-news prompts.
 - Draft receipt expense reports from local receipt staging folders.
+- Package research notes into summaries, presentation guides, and image prompts.
 
 The tools are intentionally simple and dependency-free. They are safe starter workflows that can later be connected to Codex, ChatGPT, Notion, Gmail, or document tools after the privacy boundary is clear.
 
@@ -95,6 +96,16 @@ Create a receipt expense report:
 
 ```bash
 python3 -m workday_automation_starter receipt-report examples/receipts
+```
+
+Create a research presentation package:
+
+```bash
+python3 -m workday_automation_starter research-pack \
+  --topic "AI workflow research" \
+  --sources examples/research \
+  --output-dir outputs/research-pack \
+  --images 3
 ```
 
 ## Commands
@@ -210,6 +221,19 @@ The output includes:
 
 See [`docs/receipt-report.md`](docs/receipt-report.md).
 
+### `research-pack`
+
+Creates a local research summary and presentation package from source notes or PDF placeholders.
+
+The package includes:
+
+- literature summary draft,
+- presentation guide,
+- image prompts,
+- package manifest.
+
+See [`docs/research-pack.md`](docs/research-pack.md).
+
 ## Privacy
 
 This project does not call Gmail, Notion, OpenAI, analytics, or any remote API. All examples run locally.
@@ -228,6 +252,7 @@ Codex can help turn these starter workflows into safer real tools: tests, file h
 - Add optional web search and Notion publishing connector boundaries for trend digests.
 - Add optional Word, PPT, and image export connector boundaries for campaign packages.
 - Add optional OCR and Word export connector boundaries for receipt reports.
+- Add optional PDF extraction, Word, PPTX, and image-generation connector boundaries for research packs.
 - Add Word export for daily and weekly report drafts.
 - Add a privacy preflight check before processing real folders.
 - Add undo command support from `smart-clean` manifests.

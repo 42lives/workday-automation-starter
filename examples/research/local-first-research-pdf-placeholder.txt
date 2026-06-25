@@ -1,0 +1,3 @@
+PDF placeholder note.
+
+Use this file as a public-safe stand-in for a paper PDF. Real PDF files may be copyrighted or private and should stay outside the repository unless they are explicitly licensed for sharing.

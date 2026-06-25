@@ -9,6 +9,7 @@ from .email_digest import build_email_digest
 from .file_plan import build_file_plan, render_file_plan
 from .report_draft import build_report_draft
 from .receipt_report import build_receipt_report
+from .research_pack import build_research_package, render_research_package_summary
 from .smart_clean import (
     SmartCleanOptions,
     apply_smart_clean_plan,
@@ -68,6 +69,12 @@ def main(argv: list[str] | None = None) -> int:
     receipt_report.add_argument("path", type=Path, help="Receipt staging folder.")
     receipt_report.add_argument("--format", choices=["markdown", "json", "csv"], default="markdown")
 
+    research_pack = subparsers.add_parser("research-pack", help="Create a research summary and presentation package.")
+    research_pack.add_argument("--topic", required=True)
+    research_pack.add_argument("--sources", type=Path, required=True, help="Folder containing PDF placeholders or extracted text notes.")
+    research_pack.add_argument("--output-dir", type=Path, required=True)
+    research_pack.add_argument("--images", type=int, default=3)
+
     args = parser.parse_args(argv)
 
     if args.command == "file-plan":
@@ -113,6 +120,11 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.command == "receipt-report":
         print(build_receipt_report(args.path, args.format), end="")
+        return 0
+
+    if args.command == "research-pack":
+        manifest = build_research_package(args.topic, args.sources, args.output_dir, args.images)
+        print(render_research_package_summary(manifest), end="")
         return 0
 
     parser.error(f"Unknown command: {args.command}")
