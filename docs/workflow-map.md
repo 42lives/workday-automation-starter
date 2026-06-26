@@ -157,6 +157,8 @@ Output:
 
 - literature summary,
 - presentation guide,
+- citation map,
+- review checklist,
 - image prompts,
 - package manifest.
 

@@ -12,7 +12,7 @@ This project turns common daily tasks into small, reviewable command-line workfl
 - Create trend digests and Notion-ready CSV from sanitized news items.
 - Generate a local campaign package with proposal, slide outline, and card-news prompts.
 - Draft receipt expense reports from local receipt staging folders.
-- Package research notes into summaries, presentation guides, and image prompts.
+- Package research notes into summaries, citation maps, review checklists, presentation guides, and image prompts.
 
 The tools are intentionally simple and dependency-free. They are safe starter workflows that can later be connected to Codex, ChatGPT, Notion, Gmail, or document tools after the privacy boundary is clear.
 
@@ -229,6 +229,8 @@ The package includes:
 
 - literature summary draft,
 - presentation guide,
+- citation map,
+- review checklist,
 - image prompts,
 - package manifest.
 

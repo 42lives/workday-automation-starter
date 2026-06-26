@@ -226,13 +226,19 @@ class WorkdayAutomationTest(unittest.TestCase):
             expected_files_exist = [
                 (package_dir / "literature-summary.md").exists(),
                 (package_dir / "presentation-guide.md").exists(),
+                (package_dir / "citation-map.md").exists(),
+                (package_dir / "review-checklist.md").exists(),
                 (package_dir / "image-prompts.md").exists(),
                 (package_dir / "research-manifest.json").exists(),
             ]
+            citation_map = (package_dir / "citation-map.md").read_text(encoding="utf-8")
+            review_checklist = (package_dir / "review-checklist.md").read_text(encoding="utf-8")
 
         self.assertEqual(len(parsed_sources), 2)
         self.assertEqual(manifest["source_count"], 2)
-        self.assertEqual(expected_files_exist, [True, True, True, True])
+        self.assertEqual(expected_files_exist, [True, True, True, True, True, True])
+        self.assertIn("Suggested citation label", citation_map)
+        self.assertIn("PDF text manually", review_checklist)
 
 
 if __name__ == "__main__":

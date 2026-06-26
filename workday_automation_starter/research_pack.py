@@ -25,6 +25,8 @@ def build_research_package(topic: str, source_dir: Path, output_dir: Path, image
 
     summary = render_literature_summary(topic, sources)
     presentation = render_research_presentation(topic, sources)
+    citation_map = render_citation_map(topic, sources)
+    review_checklist = render_research_review_checklist(topic, sources)
     image_prompts = render_research_image_prompts(topic, images)
     manifest = {
         "topic": topic,
@@ -34,6 +36,8 @@ def build_research_package(topic: str, source_dir: Path, output_dir: Path, image
         "files": {
             "summary": "literature-summary.md",
             "presentation": "presentation-guide.md",
+            "citation_map": "citation-map.md",
+            "review_checklist": "review-checklist.md",
             "image_prompts": "image-prompts.md",
             "manifest": "research-manifest.json",
         },
@@ -42,6 +46,8 @@ def build_research_package(topic: str, source_dir: Path, output_dir: Path, image
 
     (package_dir / "literature-summary.md").write_text(summary, encoding="utf-8")
     (package_dir / "presentation-guide.md").write_text(presentation, encoding="utf-8")
+    (package_dir / "citation-map.md").write_text(citation_map, encoding="utf-8")
+    (package_dir / "review-checklist.md").write_text(review_checklist, encoding="utf-8")
     (package_dir / "image-prompts.md").write_text(image_prompts, encoding="utf-8")
     (package_dir / "research-manifest.json").write_text(
         json.dumps(manifest, indent=2, ensure_ascii=False) + "\n",
@@ -152,6 +158,78 @@ def render_research_presentation(topic: str, sources: list[ResearchSource]) -> s
     ]
     for index, (title, body) in enumerate(slides, start=1):
         lines.extend([f"## Slide {index}: {title}", "", f"- {body}", ""])
+    return "\n".join(lines).rstrip() + "\n"
+
+
+def render_citation_map(topic: str, sources: list[ResearchSource]) -> str:
+    lines = [
+        f"# Citation Map: {topic}",
+        "",
+        "Use this file to connect every summary or slide claim back to a source before sharing.",
+        "",
+    ]
+    if not sources:
+        lines.extend(["No sources found.", ""])
+    for index, source in enumerate(sources, start=1):
+        lines.extend(
+            [
+                f"## Source {index}: {source.title}",
+                "",
+                f"- File: `{source.path}`",
+                f"- Type: {source.kind}",
+                f"- Suggested citation label: `[S{index}]`",
+                "- Use in slides:",
+                "  - Source Overview",
+                "  - Key Findings",
+                "- Claims to verify:",
+            ]
+        )
+        for point in source.key_points:
+            lines.append(f"  - {point}")
+        lines.append("")
+    lines.extend(
+        [
+            "## Citation Rules",
+            "",
+            "- Replace suggested labels with formal citations before submission or publication.",
+            "- Do not quote long passages from copyrighted PDFs without permission.",
+            "- Mark weak or unverified claims as follow-up research.",
+        ]
+    )
+    return "\n".join(lines).rstrip() + "\n"
+
+
+def render_research_review_checklist(topic: str, sources: list[ResearchSource]) -> str:
+    has_pdf_placeholders = any(source.kind == "pdf-placeholder" for source in sources)
+    lines = [
+        f"# Research Review Checklist: {topic}",
+        "",
+        "Complete this checklist before turning the package into a report, PPTX, or public post.",
+        "",
+        "## Source Review",
+        "",
+        "- [ ] Confirm every source is allowed for personal or public use.",
+        "- [ ] Add formal citations for each source used in the summary.",
+        "- [ ] Compare each generated summary against the original source.",
+    ]
+    if has_pdf_placeholders:
+        lines.append("- [ ] Extract or review PDF text manually before making factual claims from PDF placeholders.")
+    lines.extend(
+        [
+            "",
+            "## Presentation Review",
+            "",
+            "- [ ] Keep one claim per slide and connect it to a citation label.",
+            "- [ ] Mark limitations and missing evidence clearly.",
+            "- [ ] Remove private notes, account names, file paths, and confidential details.",
+            "",
+            "## Image Review",
+            "",
+            "- [ ] Use original or licensed visuals.",
+            "- [ ] Do not recreate copyrighted figures, logos, or paper diagrams.",
+            "- [ ] Review generated image prompts before using an image tool.",
+        ]
+    )
     return "\n".join(lines).rstrip() + "\n"
 
 

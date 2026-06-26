@@ -8,6 +8,8 @@ Folder: `examples/research-package`
 
 - summary: `literature-summary.md`
 - presentation: `presentation-guide.md`
+- citation_map: `citation-map.md`
+- review_checklist: `review-checklist.md`
 - image_prompts: `image-prompts.md`
 - manifest: `research-manifest.json`
 

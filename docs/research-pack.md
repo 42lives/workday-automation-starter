@@ -9,8 +9,10 @@ It is a safe starter version of a paper/PDF workflow:
 3. register PDF files as placeholders until text extraction is added,
 4. create a literature summary draft,
 5. create a presentation guide,
-6. create image prompts for intro or visual assets,
-7. save a package manifest.
+6. create a citation map that links sources to slide claims,
+7. create a review checklist for copyright, citation, and privacy checks,
+8. create image prompts for intro or visual assets,
+9. save a package manifest.
 
 The public repository does not parse copyrighted PDFs, create Word files, create PPTX files, or generate images by default. Those steps should stay optional and reviewable.
 
@@ -28,8 +30,18 @@ Generated files:
 
 - `literature-summary.md`
 - `presentation-guide.md`
+- `citation-map.md`
+- `review-checklist.md`
 - `image-prompts.md`
 - `research-manifest.json`
+
+## Review Workflow
+
+Before converting the package into Word, PPTX, or a public post:
+
+1. use `citation-map.md` to connect every claim to a source,
+2. use `review-checklist.md` to verify copyright, privacy, and citation boundaries,
+3. only then export to document, slide, or image tools.
 
 ## Integration Boundary
 
