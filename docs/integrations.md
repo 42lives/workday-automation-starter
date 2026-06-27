@@ -56,7 +56,8 @@ Bad connector behavior:
 python3 -m workday_automation_starter email-reply-assistant \
   --emails ~/Exports/gmail-last-24h.txt \
   --output-dir ~/Automation/email-reply-review \
-  --important-sender partner@example.com
+  --important-sender partner@example.com \
+  --since-hours 24
 ```
 
 Future connectors may:

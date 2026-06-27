@@ -1,6 +1,7 @@
 # Email Reply Assistant Package
 
 Emails reviewed: 3
+Emails after time filter: 3
 Reply drafts: 2
 Folder: `examples/email-reply-package`
 

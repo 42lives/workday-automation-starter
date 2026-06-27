@@ -4,6 +4,7 @@ import csv
 import io
 import json
 from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta
 from pathlib import Path
 
 from .email_digest import EmailItem, infer_next_action, parse_email_items, summarize_body
@@ -26,17 +27,24 @@ def build_email_reply_package(
     output_dir: Path,
     important_senders: list[str] | None = None,
     status: str = "Pending review",
+    since_hours: int | None = None,
+    reference_time: str | None = None,
 ) -> dict[str, object]:
     package_dir = output_dir.expanduser()
     package_dir.mkdir(parents=True, exist_ok=True)
 
     items = parse_email_items(email_path)
-    reply_items = build_reply_plan(items, important_senders or [], status)
+    now = parse_reference_time(reference_time)
+    filtered_items = filter_recent_items(items, since_hours, now)
+    reply_items = build_reply_plan(filtered_items, important_senders or [], status)
     manifest = {
         "source": str(email_path.expanduser().resolve()),
         "package_dir": str(package_dir),
         "email_count": len(items),
+        "filtered_email_count": len(filtered_items),
         "reply_count": len(reply_items),
+        "since_hours": since_hours,
+        "reference_time": now.isoformat(timespec="minutes") if now else None,
         "files": {
             "reply_drafts": "reply-drafts.md",
             "notion_archive": "notion-archive.csv",
@@ -54,6 +62,46 @@ def build_email_reply_package(
         encoding="utf-8",
     )
     return manifest
+
+
+def parse_reference_time(value: str | None) -> datetime | None:
+    if not value:
+        return None
+    return parse_email_datetime(value)
+
+
+def filter_recent_items(items: list[EmailItem], since_hours: int | None, now: datetime | None) -> list[EmailItem]:
+    if since_hours is None:
+        return items
+    if since_hours <= 0:
+        return []
+    reference = now or datetime.now()
+    earliest = reference - timedelta(hours=since_hours)
+    filtered: list[EmailItem] = []
+    for item in items:
+        received_at = parse_email_datetime(item.received_at)
+        if received_at and earliest <= received_at <= reference:
+            filtered.append(item)
+    return filtered
+
+
+def parse_email_datetime(value: str) -> datetime | None:
+    clean = value.strip()
+    if not clean:
+        return None
+    clean = clean.replace("Z", "+00:00")
+    for candidate in (clean, clean.replace(" ", "T")):
+        try:
+            parsed = datetime.fromisoformat(candidate)
+            return parsed.replace(tzinfo=None)
+        except ValueError:
+            continue
+    for fmt in ("%Y-%m-%d %H:%M", "%Y-%m-%d", "%Y/%m/%d %H:%M", "%Y/%m/%d"):
+        try:
+            return datetime.strptime(clean, fmt)
+        except ValueError:
+            continue
+    return None
 
 
 def build_reply_plan(items: list[EmailItem], important_senders: list[str], status: str) -> list[ReplyPlanItem]:
@@ -173,6 +221,7 @@ def render_email_reply_package_summary(manifest: dict[str, object]) -> str:
         "# Email Reply Assistant Package",
         "",
         f"Emails reviewed: {manifest['email_count']}",
+        f"Emails after time filter: {manifest['filtered_email_count']}",
         f"Reply drafts: {manifest['reply_count']}",
         f"Folder: `{manifest['package_dir']}`",
         "",

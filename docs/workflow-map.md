@@ -66,6 +66,7 @@ Privacy rule:
 Input:
 
 - sanitized email export,
+- recent-hours filter,
 - optional important sender list,
 - Notion status label.
 

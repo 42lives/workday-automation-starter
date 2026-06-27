@@ -54,6 +54,8 @@ def main(argv: list[str] | None = None) -> int:
     email_reply.add_argument("--output-dir", type=Path, required=True, help="Folder where package files will be written.")
     email_reply.add_argument("--important-sender", action="append", default=[], help="Sender that should always be reviewed.")
     email_reply.add_argument("--status", default="Pending review", help="Status value for the Notion-ready CSV.")
+    email_reply.add_argument("--since-hours", type=int, help="Only include emails received within this many hours.")
+    email_reply.add_argument("--now", help="Reference time for --since-hours, for example '2026-06-27 10:00'.")
 
     daily_report = subparsers.add_parser("daily-report", help="Create a daily or weekly report draft from sample inputs.")
     daily_report.add_argument("--emails", type=Path, required=True, help="Sample Gmail-like text export.")
@@ -113,7 +115,14 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     if args.command == "email-reply-assistant":
-        manifest = build_email_reply_package(args.emails, args.output_dir, args.important_sender, args.status)
+        manifest = build_email_reply_package(
+            args.emails,
+            args.output_dir,
+            args.important_sender,
+            args.status,
+            args.since_hours,
+            args.now,
+        )
         print(render_email_reply_package_summary(manifest), end="")
         return 0
 

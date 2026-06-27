@@ -88,13 +88,24 @@ class WorkdayAutomationTest(unittest.TestCase):
                 "From: notes@example.test\n"
                 "Date: 2026-06-27 09:00\n"
                 "Subject: Knowledge capture\n"
-                "Body: Save this note for later.\n",
+                "Body: Save this note for later.\n"
+                "---\n"
+                "From: old@example.test\n"
+                "Date: 2026-06-25 08:00\n"
+                "Subject: Old review\n"
+                "Body: Please review this old note.\n",
                 encoding="utf-8",
             )
 
             items = parse_email_items(inbox)
             plan = build_reply_plan(items, ["notes@example.test"], "Pending review")
-            manifest = build_email_reply_package(inbox, output, ["notes@example.test"])
+            manifest = build_email_reply_package(
+                inbox,
+                output,
+                ["notes@example.test"],
+                since_hours=24,
+                reference_time="2026-06-27 10:00",
+            )
             package_dir = Path(manifest["package_dir"])
             files_exist = [
                 (package_dir / "reply-drafts.md").exists(),
@@ -103,7 +114,8 @@ class WorkdayAutomationTest(unittest.TestCase):
                 (package_dir / "email-reply-manifest.json").exists(),
             ]
 
-        self.assertEqual(len(plan), 2)
+        self.assertEqual(len(plan), 3)
+        self.assertEqual(manifest["filtered_email_count"], 2)
         self.assertEqual(manifest["reply_count"], 2)
         self.assertEqual(files_exist, [True, True, True, True])
 

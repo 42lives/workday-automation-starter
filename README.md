@@ -72,7 +72,9 @@ Create reply drafts and a Notion archive package:
 python3 -m workday_automation_starter email-reply-assistant \
   --emails examples/emails/sample-inbox.txt \
   --output-dir outputs/email-reply \
-  --important-sender operations@example.test
+  --important-sender operations@example.test \
+  --since-hours 24 \
+  --now "2026-06-27 10:00"
 ```
 
 Create a weekly work report draft:
@@ -186,7 +188,7 @@ The package includes:
 - approval checklist,
 - package manifest.
 
-It does not create Gmail drafts, send email, or write to Notion. See [`docs/email-reply-assistant.md`](docs/email-reply-assistant.md).
+It supports recent-hours filtering for last-24-hours review flows. It does not create Gmail drafts, send email, or write to Notion. See [`docs/email-reply-assistant.md`](docs/email-reply-assistant.md).
 
 ### `daily-report`
 
