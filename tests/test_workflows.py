@@ -5,6 +5,7 @@ from pathlib import Path
 from workday_automation_starter.campaign_kit import build_campaign_package, render_package_summary, slugify
 from workday_automation_starter.doc_outline import build_doc_outline
 from workday_automation_starter.email_digest import build_email_digest, parse_email_items
+from workday_automation_starter.email_reply_assistant import build_email_reply_package, build_reply_plan
 from workday_automation_starter.file_plan import build_file_plan, classify_file
 from workday_automation_starter.report_draft import build_report_draft, parse_calendar_events
 from workday_automation_starter.receipt_report import build_receipt_report, parse_receipt_filename, scan_receipts
@@ -58,6 +59,7 @@ class WorkdayAutomationTest(unittest.TestCase):
             inbox = Path(tmpdir) / "inbox.txt"
             inbox.write_text(
                 "From: teammate@example.test\n"
+                "Date: 2026-06-27 08:15\n"
                 "Subject: Draft review\n"
                 "Body: Please review the proposal draft before Friday.\n",
                 encoding="utf-8",
@@ -68,8 +70,42 @@ class WorkdayAutomationTest(unittest.TestCase):
             csv_output = build_email_digest(inbox, "csv")
 
         self.assertEqual(len(items), 1)
+        self.assertEqual(items[0].received_at, "2026-06-27 08:15")
         self.assertIn("Review requested material", markdown)
         self.assertIn("sender,subject,summary,next_action", csv_output)
+
+    def test_email_reply_assistant_writes_drafts_archive_and_checklist(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            inbox = root / "inbox.txt"
+            output = root / "email-reply"
+            inbox.write_text(
+                "From: teammate@example.test\n"
+                "Date: 2026-06-27 08:15\n"
+                "Subject: Draft review\n"
+                "Body: Please review the proposal draft before Friday.\n"
+                "---\n"
+                "From: notes@example.test\n"
+                "Date: 2026-06-27 09:00\n"
+                "Subject: Knowledge capture\n"
+                "Body: Save this note for later.\n",
+                encoding="utf-8",
+            )
+
+            items = parse_email_items(inbox)
+            plan = build_reply_plan(items, ["notes@example.test"], "Pending review")
+            manifest = build_email_reply_package(inbox, output, ["notes@example.test"])
+            package_dir = Path(manifest["package_dir"])
+            files_exist = [
+                (package_dir / "reply-drafts.md").exists(),
+                (package_dir / "notion-archive.csv").exists(),
+                (package_dir / "approval-checklist.md").exists(),
+                (package_dir / "email-reply-manifest.json").exists(),
+            ]
+
+        self.assertEqual(len(plan), 2)
+        self.assertEqual(manifest["reply_count"], 2)
+        self.assertEqual(files_exist, [True, True, True, True])
 
     def test_smart_clean_respects_include_exclude_and_protects_private_files(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

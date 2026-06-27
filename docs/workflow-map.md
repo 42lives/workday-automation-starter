@@ -61,6 +61,27 @@ Privacy rule:
 - do not commit real Gmail exports,
 - connect real services only after the local workflow is stable.
 
+## Email Reply Assistant
+
+Input:
+
+- sanitized email export,
+- optional important sender list,
+- Notion status label.
+
+Output:
+
+- reply draft Markdown,
+- Notion-ready archive CSV,
+- approval checklist,
+- package manifest.
+
+Privacy rule:
+
+- do not send email automatically,
+- do not create Gmail drafts without review,
+- do not import to Notion before checking private details and workspace permissions.
+
 ## Daily and Weekly Reports
 
 Input:

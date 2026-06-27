@@ -11,6 +11,7 @@ class EmailItem:
     sender: str
     subject: str
     body: str
+    received_at: str = ""
 
 
 def parse_email_items(path: Path) -> list[EmailItem]:
@@ -19,13 +20,13 @@ def parse_email_items(path: Path) -> list[EmailItem]:
     items: list[EmailItem] = []
 
     for block in blocks:
-        fields = {"from": "unknown", "subject": "No subject", "body": ""}
+        fields = {"from": "unknown", "subject": "No subject", "body": "", "date": ""}
         for line in block.splitlines():
             if ":" not in line:
                 continue
             key, value = line.split(":", 1)
             fields[key.strip().lower()] = value.strip()
-        items.append(EmailItem(fields["from"], fields["subject"], fields["body"]))
+        items.append(EmailItem(fields["from"], fields["subject"], fields["body"], fields["date"]))
 
     return items
 

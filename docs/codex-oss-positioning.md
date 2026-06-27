@@ -7,6 +7,7 @@ It is not a clone of a tutorial or video. It uses common automation themes:
 - document to presentation outline,
 - downloads folder organization and safe cleanup,
 - email summary to Notion-ready notes,
+- email reply drafts and Notion-ready archive packages,
 - daily and weekly report drafts from email and calendar samples,
 - trend digests and Notion-ready CSV from sanitized news items,
 - campaign packages with proposal, slide outline, and card-news prompts,

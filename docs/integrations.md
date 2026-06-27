@@ -48,6 +48,30 @@ Bad connector behavior:
 - auto-sending emails or publishing pages without review,
 - silently uploading private files to external services.
 
+## Email Reply Assistant Boundary
+
+`email-reply-assistant` creates local reply drafts and a Notion-ready CSV first:
+
+```bash
+python3 -m workday_automation_starter email-reply-assistant \
+  --emails ~/Exports/gmail-last-24h.txt \
+  --output-dir ~/Automation/email-reply-review \
+  --important-sender partner@example.com
+```
+
+Future connectors may:
+
+- fetch Gmail messages from the last 24 hours,
+- create Gmail draft replies,
+- write reviewed rows to a Notion database.
+
+They should not:
+
+- send email automatically,
+- write unreviewed drafts into Gmail,
+- store private email text in public repos,
+- import sensitive rows to Notion without a preview.
+
 ## Suggested Future Commands
 
 These are roadmap examples, not implemented commands:
@@ -55,6 +79,7 @@ These are roadmap examples, not implemented commands:
 ```bash
 python3 -m workday_automation_starter daily-report --source exports
 python3 -m workday_automation_starter daily-report --source gmail-calendar --preview
+python3 -m workday_automation_starter email-reply-assistant --source gmail --since 24h --preview
 python3 -m workday_automation_starter trend-digest --source web-search --topic AI --preview
 python3 -m workday_automation_starter campaign-kit --topic "Campaign idea" --export pptx --preview
 python3 -m workday_automation_starter receipt-report ~/Receipts --ocr optional --preview

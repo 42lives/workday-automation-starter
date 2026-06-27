@@ -6,6 +6,7 @@ from pathlib import Path
 from .campaign_kit import build_campaign_package, render_package_summary
 from .doc_outline import build_doc_outline
 from .email_digest import build_email_digest
+from .email_reply_assistant import build_email_reply_package, render_email_reply_package_summary
 from .file_plan import build_file_plan, render_file_plan
 from .report_draft import build_report_draft
 from .receipt_report import build_receipt_report
@@ -47,6 +48,12 @@ def main(argv: list[str] | None = None) -> int:
     email_digest = subparsers.add_parser("email-digest", help="Create a Notion-ready digest from sample email text.")
     email_digest.add_argument("path", type=Path)
     email_digest.add_argument("--format", choices=["markdown", "csv"], default="markdown")
+
+    email_reply = subparsers.add_parser("email-reply-assistant", help="Create reply drafts and a Notion archive package.")
+    email_reply.add_argument("--emails", type=Path, required=True, help="Sample Gmail-like text export.")
+    email_reply.add_argument("--output-dir", type=Path, required=True, help="Folder where package files will be written.")
+    email_reply.add_argument("--important-sender", action="append", default=[], help="Sender that should always be reviewed.")
+    email_reply.add_argument("--status", default="Pending review", help="Status value for the Notion-ready CSV.")
 
     daily_report = subparsers.add_parser("daily-report", help="Create a daily or weekly report draft from sample inputs.")
     daily_report.add_argument("--emails", type=Path, required=True, help="Sample Gmail-like text export.")
@@ -103,6 +110,11 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.command == "email-digest":
         print(build_email_digest(args.path, args.format), end="")
+        return 0
+
+    if args.command == "email-reply-assistant":
+        manifest = build_email_reply_package(args.emails, args.output_dir, args.important_sender, args.status)
+        print(render_email_reply_package_summary(manifest), end="")
         return 0
 
     if args.command == "daily-report":

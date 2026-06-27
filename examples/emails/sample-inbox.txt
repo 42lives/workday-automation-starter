@@ -1,11 +1,14 @@
 From: teammate@example.test
+Date: 2026-06-27 08:15
 Subject: Draft review
 Body: Please review the proposal draft before Friday and send comments.
 ---
 From: operations@example.test
+Date: 2026-06-27 09:10
 Subject: Weekly schedule
 Body: The team schedule changed. Please check the new meeting time.
 ---
 From: notes@example.test
+Date: 2026-06-26 17:40
 Subject: Knowledge capture
 Body: Save the automation checklist so it can be reused next week.

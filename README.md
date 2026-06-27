@@ -8,6 +8,7 @@ This project turns common daily tasks into small, reviewable command-line workfl
 - Clean a folder safely with include/exclude rules, dry-run review, protected files, and a move manifest.
 - Turn a long note into a presentation outline.
 - Summarize sample email text into a Notion-ready Markdown or CSV task list.
+- Create reviewable email reply drafts and a Notion-ready archive package.
 - Draft daily or weekly work reports from sanitized email and calendar samples.
 - Create trend digests and Notion-ready CSV from sanitized news items.
 - Generate a local campaign package with proposal, slide outline, and card-news prompts.
@@ -63,6 +64,15 @@ Create a Notion-ready summary from sample email text:
 ```bash
 python3 -m workday_automation_starter email-digest examples/emails/sample-inbox.txt --format markdown
 python3 -m workday_automation_starter email-digest examples/emails/sample-inbox.txt --format csv
+```
+
+Create reply drafts and a Notion archive package:
+
+```bash
+python3 -m workday_automation_starter email-reply-assistant \
+  --emails examples/emails/sample-inbox.txt \
+  --output-dir outputs/email-reply \
+  --important-sender operations@example.test
 ```
 
 Create a weekly work report draft:
@@ -165,6 +175,19 @@ Body: Please review the draft by Friday.
 
 Use sample data only. Do not commit real email content.
 
+### `email-reply-assistant`
+
+Creates a local package for review-worthy email replies and Notion-style archiving.
+
+The package includes:
+
+- reply drafts,
+- Notion-ready archive CSV,
+- approval checklist,
+- package manifest.
+
+It does not create Gmail drafts, send email, or write to Notion. See [`docs/email-reply-assistant.md`](docs/email-reply-assistant.md).
+
 ### `daily-report`
 
 Creates a daily or weekly report draft from sanitized email and calendar sample files.
@@ -251,6 +274,7 @@ Codex can help turn these starter workflows into safer real tools: tests, file h
 - Add PPTX generation after the outline workflow is stable.
 - Add a safe sample Notion import workflow.
 - Add optional Gmail, Google Calendar, and Notion connector boundaries.
+- Add optional Gmail draft and Notion database connector boundaries for email reply packages.
 - Add optional web search and Notion publishing connector boundaries for trend digests.
 - Add optional Word, PPT, and image export connector boundaries for campaign packages.
 - Add optional OCR and Word export connector boundaries for receipt reports.
