@@ -2,6 +2,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from workday_automation_starter.asset_trend_report import build_asset_trend_package, parse_asset_trends, score_asset_item
 from workday_automation_starter.campaign_kit import build_campaign_package, render_package_summary, slugify
 from workday_automation_starter.doc_outline import build_doc_outline
 from workday_automation_starter.email_digest import build_email_digest, parse_email_items
@@ -210,6 +211,38 @@ class WorkdayAutomationTest(unittest.TestCase):
         self.assertIn("OpenAI automation workflow", markdown)
         self.assertNotIn("Market update", markdown)
         self.assertIn("summary_1,summary_2,summary_3", csv_output)
+
+    def test_asset_trend_report_writes_journal_report_and_checklist(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            items_path = root / "asset-trends.csv"
+            output = root / "asset-report"
+            items_path.write_text(
+                "date,asset,category,source,title,metric,value,summary,url\n"
+                "2026-06-27,AAPL,stock,Sample,AAPL earnings expectations,forward guidance,watch,"
+                "Analysts are watching guidance and services revenue trends.,https://example.test/aapl\n"
+                "2026-06-27,SPY,index,Sample,Fed rate path affects broad market,policy rate,unchanged,"
+                "Rate policy expectations may affect valuation and risk appetite.,https://example.test/spy\n"
+                "2026-06-27,Gold,commodity,Sample,Gold update,spot price,review,"
+                "Gold moved as inflation expectations changed.,https://example.test/gold\n",
+                encoding="utf-8",
+            )
+
+            items = parse_asset_trends(items_path)
+            manifest = build_asset_trend_package(items_path, output, ["AAPL", "SPY"], 5)
+            package_dir = Path(manifest["package_dir"])
+            files_exist = [
+                (package_dir / "market-digest.md").exists(),
+                (package_dir / "portfolio-journal.csv").exists(),
+                (package_dir / "weekly-report.md").exists(),
+                (package_dir / "connector-checklist.md").exists(),
+                (package_dir / "asset-trend-manifest.json").exists(),
+            ]
+
+        self.assertEqual(len(items), 3)
+        self.assertGreater(score_asset_item(items[1]), 1)
+        self.assertEqual(manifest["selected_count"], 2)
+        self.assertEqual(files_exist, [True, True, True, True, True])
 
     def test_campaign_kit_writes_reviewable_package_files(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

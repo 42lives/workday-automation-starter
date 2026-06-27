@@ -11,6 +11,7 @@ This project turns common daily tasks into small, reviewable command-line workfl
 - Create reviewable email reply drafts and a Notion-ready archive package.
 - Draft daily or weekly work reports from sanitized email and calendar samples.
 - Create trend digests and Notion-ready CSV from sanitized news items.
+- Create personal asset trend reports and spreadsheet-ready portfolio journals.
 - Generate a local campaign package with proposal, slide outline, and card-news prompts.
 - Draft receipt expense reports from local receipt staging folders.
 - Package research notes into summaries, citation maps, review checklists, presentation guides, and image prompts.
@@ -93,6 +94,16 @@ python3 -m workday_automation_starter trend-digest \
   --items examples/trends/sample-news.csv \
   --topic AI \
   --format markdown
+```
+
+Create a personal asset trend report:
+
+```bash
+python3 -m workday_automation_starter asset-trend-report \
+  --items examples/assets/sample-asset-trends.csv \
+  --output-dir outputs/asset-trends \
+  --watchlist AAPL \
+  --watchlist SPY
 ```
 
 Create a campaign package:
@@ -218,6 +229,20 @@ The output includes:
 
 See [`docs/trend-digest.md`](docs/trend-digest.md).
 
+### `asset-trend-report`
+
+Creates a local personal finance trend package from sanitized market, real-estate, or newsletter notes.
+
+The package includes:
+
+- market digest,
+- Google-Sheets-ready portfolio journal CSV,
+- weekly report draft,
+- connector checklist,
+- package manifest.
+
+It is for tracking and review only, not investment advice. See [`docs/asset-trend-report.md`](docs/asset-trend-report.md).
+
 ### `campaign-kit`
 
 Creates a local campaign package from one topic.
@@ -278,6 +303,7 @@ Codex can help turn these starter workflows into safer real tools: tests, file h
 - Add optional Gmail, Google Calendar, and Notion connector boundaries.
 - Add optional Gmail draft and Notion database connector boundaries for email reply packages.
 - Add optional web search and Notion publishing connector boundaries for trend digests.
+- Add optional web search, Gmail newsletter, Google Sheets, and Word export connector boundaries for asset trend reports.
 - Add optional Word, PPT, and image export connector boundaries for campaign packages.
 - Add optional OCR and Word export connector boundaries for receipt reports.
 - Add optional PDF extraction, Word, PPTX, and image-generation connector boundaries for research packs.

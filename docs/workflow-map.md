@@ -123,6 +123,28 @@ Privacy rule:
 - make live web search optional,
 - keep sample trend data synthetic in public.
 
+## Asset Trend Report
+
+Input:
+
+- sanitized finance or market CSV,
+- watchlist symbols or keywords,
+- item limit.
+
+Output:
+
+- market digest,
+- spreadsheet-ready portfolio journal CSV,
+- weekly report draft,
+- connector checklist.
+
+Privacy rule:
+
+- do not connect brokerage accounts,
+- do not publish balances or account numbers,
+- verify figures before recording them,
+- treat generated output as tracking notes, not financial advice.
+
 ## Campaign Package
 
 Input:

@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
+from .asset_trend_report import build_asset_trend_package, render_asset_trend_package_summary
 from .campaign_kit import build_campaign_package, render_package_summary
 from .doc_outline import build_doc_outline
 from .email_digest import build_email_digest
@@ -69,6 +70,12 @@ def main(argv: list[str] | None = None) -> int:
     trend_digest.add_argument("--limit", type=int, default=10)
     trend_digest.add_argument("--format", choices=["markdown", "json", "csv"], default="markdown")
 
+    asset_report = subparsers.add_parser("asset-trend-report", help="Create a personal asset trend report package.")
+    asset_report.add_argument("--items", type=Path, required=True, help="CSV file with sanitized asset trend items.")
+    asset_report.add_argument("--output-dir", type=Path, required=True, help="Folder where package files will be written.")
+    asset_report.add_argument("--watchlist", action="append", default=[], help="Asset ticker, keyword, or topic to include.")
+    asset_report.add_argument("--limit", type=int, default=5)
+
     campaign_kit = subparsers.add_parser("campaign-kit", help="Create a local campaign package from one topic.")
     campaign_kit.add_argument("--topic", required=True, help="Campaign topic or planning keyword.")
     campaign_kit.add_argument("--output-dir", type=Path, required=True, help="Folder where package files will be written.")
@@ -132,6 +139,11 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.command == "trend-digest":
         print(build_trend_digest(args.items, args.topic, args.limit, args.format), end="")
+        return 0
+
+    if args.command == "asset-trend-report":
+        manifest = build_asset_trend_package(args.items, args.output_dir, args.watchlist, args.limit)
+        print(render_asset_trend_package_summary(manifest), end="")
         return 0
 
     if args.command == "campaign-kit":

@@ -73,6 +73,32 @@ They should not:
 - store private email text in public repos,
 - import sensitive rows to Notion without a preview.
 
+## Asset Trend Report Boundary
+
+`asset-trend-report` creates local finance tracking outputs first:
+
+```bash
+python3 -m workday_automation_starter asset-trend-report \
+  --items ~/Exports/asset-trends.csv \
+  --output-dir ~/Automation/asset-trends \
+  --watchlist AAPL \
+  --watchlist SPY
+```
+
+Future connectors may:
+
+- search the web for market or real-estate news,
+- read Gmail finance newsletters,
+- append reviewed rows to Google Sheets,
+- export a weekly Word report.
+
+They should not:
+
+- connect brokerage accounts,
+- store balances, account numbers, or tax identifiers in public repos,
+- write to Google Sheets without preview,
+- present generated summaries as investment advice.
+
 ## Suggested Future Commands
 
 These are roadmap examples, not implemented commands:
@@ -82,6 +108,7 @@ python3 -m workday_automation_starter daily-report --source exports
 python3 -m workday_automation_starter daily-report --source gmail-calendar --preview
 python3 -m workday_automation_starter email-reply-assistant --source gmail --since 24h --preview
 python3 -m workday_automation_starter trend-digest --source web-search --topic AI --preview
+python3 -m workday_automation_starter asset-trend-report --source web-gmail --watchlist AAPL --preview
 python3 -m workday_automation_starter campaign-kit --topic "Campaign idea" --export pptx --preview
 python3 -m workday_automation_starter receipt-report ~/Receipts --ocr optional --preview
 python3 -m workday_automation_starter research-pack --sources ~/Papers --pdf-extract optional --preview

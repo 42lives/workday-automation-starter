@@ -10,6 +10,7 @@ It is not a clone of a tutorial or video. It uses common automation themes:
 - email reply drafts and Notion-ready archive packages,
 - daily and weekly report drafts from email and calendar samples,
 - trend digests and Notion-ready CSV from sanitized news items,
+- personal asset trend reports and spreadsheet-ready journals,
 - campaign packages with proposal, slide outline, and card-news prompts,
 - receipt expense report drafts from local staging folders,
 - research summary and presentation packages from local source notes,

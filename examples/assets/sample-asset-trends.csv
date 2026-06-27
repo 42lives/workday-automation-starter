@@ -1,0 +1,5 @@
+date,asset,category,source,title,metric,value,summary,url
+2026-06-27,AAPL,stock,Sample Market Brief,AAPL earnings expectations,forward guidance,watch,Analysts are watching guidance and services revenue trends before the next update.,https://example.test/aapl
+2026-06-27,SPY,index,Sample Macro Brief,Fed rate path affects broad market,policy rate,unchanged,Rate policy expectations may affect valuation and portfolio risk appetite.,https://example.test/fed
+2026-06-27,Seoul housing,real_estate,Sample Property Brief,Apartment transaction volume update,transactions,mixed,Housing transaction data is mixed and should be reviewed with local source data.,https://example.test/housing
+2026-06-26,USD/KRW,fx,Sample FX Brief,Won movement after macro data,exchange rate,review,FX movement may affect imported goods and overseas asset returns.,https://example.test/fx
