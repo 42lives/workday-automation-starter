@@ -5,6 +5,7 @@ Local-first office automation examples for working professionals who want to use
 This project turns common daily tasks into small, reviewable command-line workflows:
 
 - Plan how to organize a messy downloads folder.
+- Scan folders for privacy risks before processing real files.
 - Clean a folder safely with include/exclude rules, dry-run review, protected files, and a move manifest.
 - Turn a long note into a presentation outline.
 - Summarize sample email text into a Notion-ready Markdown or CSV task list.
@@ -40,6 +41,12 @@ Create a file organization plan:
 
 ```bash
 python3 -m workday_automation_starter file-plan examples --format markdown
+```
+
+Run a privacy preflight before processing real files:
+
+```bash
+python3 -m workday_automation_starter privacy-preflight ~/Downloads --format markdown
 ```
 
 Plan a safer file cleanup:
@@ -147,6 +154,20 @@ The plan groups files into:
 - archives,
 - possible private files,
 - other files.
+
+### `privacy-preflight`
+
+Scans a folder for likely privacy risks before real automation runs.
+
+The report includes:
+
+- possible private file names and extensions,
+- secret-like tokens,
+- email-like personal data,
+- private or credential-like wording,
+- Markdown or JSON output.
+
+See [`docs/privacy-preflight.md`](docs/privacy-preflight.md).
 
 ### `smart-clean`
 
@@ -308,7 +329,7 @@ Codex can help turn these starter workflows into safer real tools: tests, file h
 - Add optional OCR and Word export connector boundaries for receipt reports.
 - Add optional PDF extraction, Word, PPTX, and image-generation connector boundaries for research packs.
 - Add Word export for daily and weekly report drafts.
-- Add a privacy preflight check before processing real folders.
+- Expand privacy preflight patterns for more file types.
 - Add undo command support from `smart-clean` manifests.
 - Add a guided automation checklist for new workflows.
 

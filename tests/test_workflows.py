@@ -8,6 +8,7 @@ from workday_automation_starter.doc_outline import build_doc_outline
 from workday_automation_starter.email_digest import build_email_digest, parse_email_items
 from workday_automation_starter.email_reply_assistant import build_email_reply_package, build_reply_plan
 from workday_automation_starter.file_plan import build_file_plan, classify_file
+from workday_automation_starter.privacy_preflight import build_privacy_preflight, render_privacy_preflight
 from workday_automation_starter.report_draft import build_report_draft, parse_calendar_events
 from workday_automation_starter.receipt_report import build_receipt_report, parse_receipt_filename, scan_receipts
 from workday_automation_starter.research_pack import build_research_package, scan_research_sources
@@ -39,6 +40,21 @@ class WorkdayAutomationTest(unittest.TestCase):
     def test_file_plan_marks_private_like_files(self) -> None:
         self.assertEqual(classify_file(Path(".env")), "possible_private")
         self.assertEqual(classify_file(Path("private.pem")), "possible_private")
+
+    def test_privacy_preflight_flags_private_files_and_email_text(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            (root / ".env").write_text("TOKEN=fake\n", encoding="utf-8")
+            (root / "notes.md").write_text("Contact test@example.com before sharing.\n", encoding="utf-8")
+
+            report = build_privacy_preflight(root)
+            markdown = render_privacy_preflight(report, "markdown")
+            json_output = render_privacy_preflight(report, "json")
+
+        self.assertGreaterEqual(report["summary"]["high"], 1)
+        self.assertGreaterEqual(report["summary"]["medium"], 1)
+        self.assertIn("Privacy Preflight", markdown)
+        self.assertIn('"findings"', json_output)
 
     def test_doc_outline_creates_requested_slide_count(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

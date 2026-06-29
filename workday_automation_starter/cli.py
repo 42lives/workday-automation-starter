@@ -9,6 +9,7 @@ from .doc_outline import build_doc_outline
 from .email_digest import build_email_digest
 from .email_reply_assistant import build_email_reply_package, render_email_reply_package_summary
 from .file_plan import build_file_plan, render_file_plan
+from .privacy_preflight import build_privacy_preflight, render_privacy_preflight
 from .report_draft import build_report_draft
 from .receipt_report import build_receipt_report
 from .research_pack import build_research_package, render_research_package_summary
@@ -32,6 +33,10 @@ def main(argv: list[str] | None = None) -> int:
     file_plan = subparsers.add_parser("file-plan", help="Create a dry-run file organization plan.")
     file_plan.add_argument("path", type=Path)
     file_plan.add_argument("--format", choices=["markdown", "json"], default="markdown")
+
+    privacy_preflight = subparsers.add_parser("privacy-preflight", help="Scan a folder before using real files.")
+    privacy_preflight.add_argument("path", type=Path)
+    privacy_preflight.add_argument("--format", choices=["markdown", "json"], default="markdown")
 
     smart_clean = subparsers.add_parser("smart-clean", help="Plan or apply a safe file cleanup workflow.")
     smart_clean.add_argument("path", type=Path)
@@ -95,6 +100,10 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.command == "file-plan":
         print(render_file_plan(build_file_plan(args.path), args.format), end="")
+        return 0
+
+    if args.command == "privacy-preflight":
+        print(render_privacy_preflight(build_privacy_preflight(args.path), args.format), end="")
         return 0
 
     if args.command == "smart-clean":

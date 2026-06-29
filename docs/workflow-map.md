@@ -34,6 +34,7 @@ Input:
 Output:
 
 - dry-run organization plan,
+- privacy preflight report,
 - category counts,
 - possible private file warnings.
 - include and exclude based cleanup plan,
@@ -41,6 +42,7 @@ Output:
 
 Privacy rule:
 
+- run privacy preflight before processing real user folders,
 - do not move files automatically until the dry-run has been reviewed.
 - protect likely private files instead of moving them.
 
